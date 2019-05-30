@@ -1,13 +1,6 @@
 <template>
     <section class="section">
-        <div class="level">
-            <div class="level-left">
-                <h2 class="level-item subtitle is-4">Choose from the menu:</h2>
-            </div>
-            <div class="level-right">
-                <a class="level-item is-size-4" @click="Cart()"><strong><font-awesome-icon icon="shopping-cart"/>  {{ cart }}</strong></a>
-            </div>
-        </div>
+         <h2 class="level-item subtitle is-4">Your order:</h2>
         <b-table :data="data" :mobile-cards="false">
             <template slot-scope="props">
                 <b-table-column field="food_drink" label="Food/Drink">
@@ -16,11 +9,19 @@
                 <b-table-column field="price" label="Price">
                     $ {{ props.row.price }}
                 </b-table-column>
-                <b-table-column field="add" label="Add" class="has-text-right">
-                    <button class="button is-small is-danger is-rounded" @click="Add(props.row)"><font-awesome-icon icon="plus"/></button>
-                </b-table-column>
             </template>
         </b-table> 
+        <hr/>
+         <div class="level is-mobile">
+            <div class="level-left">
+                <p class="is-size-4">Total:</p>
+            </div>
+            <div class="level-right">
+                <p class="is-size-4" > $ {{ data.length }}</p>
+            </div>
+        </div>
+        <b-button class="is-rounded is-primary is-large is-fullwidth" @click="complete()" style="margin-top: 10%">Complete Order</b-button>
+        <b-button class="is-rounded is-light is-large is-fullwidth" @click="cancle()" style="margin-top: 10px">Cancle Order</b-button>
     </section>
 </template>
 
@@ -34,16 +35,16 @@
                     { 'food_drink': 'Pommes', 'price': 3.5 },
                     { 'food_drink': 'Cola', 'price': 2 },
                 ],
-                cart: 0
             }
         },
         methods: {
-             Add(product) {
-                this.$notification.open('Added ' + product.food_drink + ' to cart!');
-                this.cart++;
+            complete() {
+                this.$notification.open('Order completed! :)')
+                this.$router.push('/login')
             },
-            Cart() {
-                this.$router.push('/cart')    
+            cancle() {
+                this.$notification.open('Order canceld! :(')
+                this.$router.push('/login')
             }
         }
     }
