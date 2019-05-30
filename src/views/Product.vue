@@ -8,7 +8,7 @@
                 <a class="level-item is-size-4" @click="Cart()"><strong><font-awesome-icon icon="shopping-cart"/>  {{ cart }}</strong></a>
             </div>
         </div>
-        <b-table :data="data" :mobile-cards="false">
+        <b-table :data="products" :mobile-cards="false">
             <template slot-scope="props">
                 <b-table-column field="food_drink" label="Food/Drink">
                     {{ props.row.food_drink }}
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import ApiService from '../ApiService';
+
     export default {
         data() {
             return {
@@ -34,12 +36,21 @@
                     { 'food_drink': 'Pommes', 'price': 3.5 },
                     { 'food_drink': 'Cola', 'price': 2 },
                 ],
-                cart: 0
+                cart: 0,
+                products: [],
+                error: ''
+            }
+        },
+        async created(){
+            try{
+                this.products = await ApiService.getProduct();
+            } catch(err) {
+                this.error = err.message;
             }
         },
         methods: {
              Add(product) {
-                this.$notification.open('Added ' + product.food_drink + ' to cart!');
+                this.$notification.open(product.food_drink + ' added to cart!');
                 this.cart++;
             },
             Cart() {
