@@ -30,12 +30,8 @@ import ApiService from '../ApiService';
     export default {
         data() {
             return {
-                data: [
-                    { 'food_drink': 'Pizza', 'price': 5.5, },
-                    { 'food_drink': 'Burger', 'price': 7.5 },
-                    { 'food_drink': 'Pommes', 'price': 3.5 },
-                    { 'food_drink': 'Cola', 'price': 2 },
-                ],
+                orderId: '',
+                orderProducts: [],
                 cart: 0,
                 products: [],
                 error: ''
@@ -43,19 +39,36 @@ import ApiService from '../ApiService';
         },
         async created(){
             try{
-                this.products = await ApiService.getProduct();
+                this.products = await ApiService.getProducts();
+                this.orderId = this.$route.params.id;
             } catch(err) {
                 this.error = err.message;
             }
         },
         methods: {
-             Add(product) {
+            CheckQuantity(product){
+                let existing = false;
+                this.orderProducts.forEach(element => {
+                    if (element.pid == product.id) {
+                        existing = true;  
+                        element.quant += 1;                    
+                        console.log('existing');
+                    }
+                });
+                if(!existing){
+                    this.orderProducts.push({pid: product.id, quant: 1});
+                }
+            },
+            async Add(product) {
                 this.$notification.open(product.food_drink + ' added to cart!');
                 this.cart++;
+                this.CheckQuantity(product);
+                await ApiService.updateOrder(this.orderProducts, this.orderId);          
             },
             Cart() {
-                this.$router.push('/cart')    
-            }
+                this.$router.push({ path: `/cart/${this.orderId}` })
+            },
+            
         }
     }
 </script>

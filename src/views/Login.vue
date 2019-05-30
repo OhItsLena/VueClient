@@ -22,19 +22,19 @@
 </template>
 
 <script>
+import ApiService from '../ApiService';
+
     export default {
         name: 'Login',
         data() {
             return {
                 firstname: '',
-                lastname: ''
+                lastname: '',
+                id: 'test',
+                error: ''
             }
         },
         methods: {
-            register() {      
-                this.$notification.open('Hello ' + this.firstname + ' ' + this.lastname + '!')
-                this.$router.push('/products')
-            },
             validateBeforeSubmit() {
                 this.$validator.validateAll().then((result) => {
                     if (result) {
@@ -43,7 +43,7 @@
                             type: 'is-success',
                             position: 'is-bottom'
                         });
-                        this.register();
+                        this.createOrder();
                         return;
                     }
                     this.$toast.open({
@@ -52,7 +52,17 @@
                         position: 'is-bottom'
                     })
                 });
-            }
+            },
+            async createOrder(){
+                try {
+                    this.id = await ApiService.insertOrder(this.firstname + ' ' + this.lastname);   
+                    //this.$notification.open('Hello ' + this.id + '!')
+                    this.$notification.open('Hello ' + this.firstname + ' ' + this.lastname + '!')
+                    this.$router.push({ path: `/products/${this.id}` })
+                } catch (err) {
+                    this.error = err.message;
+                }
+            },
         }
     }
 </script>

@@ -20,12 +20,12 @@ export default new Router({
       component: Login
     },
     {
-      path: '/products',
+      path: '/products/:id',
       name: 'Products',
       component: Products
     },
     {
-      path: '/cart',
+      path: '/cart/:id',
       name: 'Cart',
       component: Cart
     },
