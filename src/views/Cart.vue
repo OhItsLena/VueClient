@@ -39,10 +39,11 @@ export default {
       orderId: "",
       orderProducts: "",
       products: [],
-      total: 0
+      total: 0,
+      isLoading: false
     };
   },
-  async created() {
+  created() {
     try {
       this.orderId = this.$route.params.id;
       //this.orderProducts = await ApiService.getOrderProducts(this.orderId);

@@ -4,7 +4,7 @@
       <div class="columns">
         <div class="column is-half is-offset-one-quarter">
           <h1 class="title">Welcome!</h1>
-          <h2 class="subtitle is-4" style="margin-bottom: 20%">Start your order now</h2>
+          <h2 class="subtitle is-4" style="margin-bottom: 20%">Please verify yourself:</h2>
 
           <form @submit.prevent="validateBeforeSubmit">
             <b-field
@@ -37,6 +37,7 @@
               style="margin-top: 15%"
             >Let's go!</button>
           </form>
+          <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="true"></b-loading>
         </div>
       </div>
     </div>
@@ -53,7 +54,8 @@ export default {
       username: "",
       password: "",
       oid: "",
-      error: ""
+      error: "",
+      isLoading: false
     };
   },
   methods: {
@@ -72,6 +74,7 @@ export default {
     },
     async createOrder() {
       try {
+        this.isLoading = true;
         const user = await ApiService.authentication(
           this.username,
           this.password
@@ -89,14 +92,15 @@ export default {
             position: "is-bottom"
           });
         }
+        this.isLoading = false;
         //this.$notification.open('Hello ' + this.id + '!')
-        this.$notification.open("Hello " + this.username + "!");
         this.$router.push({ path: `/products/${this.oid}` });
+        this.$notification.open("Hello " + this.username + "!");
       } catch (err) {
         this.error = err.message;
         this.$notification.open({
           type: "is-danger",
-          message: err
+          message: "Ups! Something went wrong :("
         });
       }
     }

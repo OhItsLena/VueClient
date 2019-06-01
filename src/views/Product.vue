@@ -24,6 +24,7 @@
         </b-table-column>
       </template>
     </b-table>
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="true"></b-loading>
   </section>
 </template>
 
@@ -37,13 +38,16 @@ export default {
       orderProducts: [],
       cart: 0,
       products: [],
-      error: ""
+      error: "",
+      isLoading: false
     };
   },
   async created() {
     try {
+      this.isLoading = true;
       this.products = await ApiService.getProducts();
       this.orderId = this.$route.params.id;
+      this.isLoading = false;
     } catch (err) {
       this.error = err.message;
     }
