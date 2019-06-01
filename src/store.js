@@ -5,12 +5,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    uid: "",
     username: "",
     password: "",
     orderProducts: []
   },
   mutations: {
     login(state, user) {
+      state.uid = user.id;
       state.username = user.name;
       state.password = user.pwd;
     },

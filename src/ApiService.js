@@ -68,18 +68,18 @@ class ApiService {
     });
   }
   //Create Order
-  static insertOrder(username, password) {
+  static insertOrder() {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await axios.post(
           url + "orders",
           {
-            guest: username
+            guest: store.state.uid
           },
           {
             auth: {
-              username: username,
-              password: password
+              username: store.state.username,
+              password: store.state.password
             }
           }
         );
@@ -113,6 +113,29 @@ class ApiService {
       auth: {
         username: store.state.username,
         password: store.state.password
+      }
+    });
+  }
+
+  //Authentication
+  static authentication(username, password) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.get(url + "auth", {
+          auth: {
+            username: username,
+            password: password
+          }
+        });
+        const data = res.data.data;
+        resolve({
+          id: data._id,
+          username: data.name,
+          password: data.password
+        });
+      } catch (err) {
+        console.log(err);
+        reject(err);
       }
     });
   }

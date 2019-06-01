@@ -52,7 +52,7 @@ export default {
     return {
       username: "",
       password: "",
-      id: "",
+      oid: "",
       error: ""
     };
   },
@@ -60,11 +60,6 @@ export default {
     validateBeforeSubmit() {
       this.$validator.validateAll().then(result => {
         if (result) {
-          this.$toast.open({
-            message: "Successfully logged in!",
-            type: "is-success",
-            position: "is-bottom"
-          });
           this.createOrder();
           return;
         }
@@ -77,16 +72,32 @@ export default {
     },
     async createOrder() {
       try {
-        this.id = await ApiService.insertOrder(this.username, this.password);
+        const user = await ApiService.authentication(
+          this.username,
+          this.password
+        );
         this.$store.commit("login", {
-          name: this.username,
-          pwd: this.password
+          id: user.id,
+          name: user.username,
+          pwd: user.password
         });
+        this.oid = await ApiService.insertOrder();
+        if (user != null) {
+          this.$toast.open({
+            message: "Successfully logged in!",
+            type: "is-success",
+            position: "is-bottom"
+          });
+        }
         //this.$notification.open('Hello ' + this.id + '!')
         this.$notification.open("Hello " + this.username + "!");
-        this.$router.push({ path: `/products/${this.id}` });
+        this.$router.push({ path: `/products/${this.oid}` });
       } catch (err) {
         this.error = err.message;
+        this.$notification.open({
+          type: "is-danger",
+          message: err
+        });
       }
     }
   }
