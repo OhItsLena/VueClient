@@ -18,7 +18,7 @@
         <b-table-column field="food_drink" label="Food/Drink">{{ props.row.food_drink }}</b-table-column>
         <b-table-column field="price" label="Price">$ {{ props.row.price }}</b-table-column>
         <b-table-column field="add" label="Add" class="has-text-right">
-          <button class="button is-small is-danger is-rounded" @click="Add(props.row)">
+          <button class="button is-small is-success is-rounded" @click="Add(props.row)">
             <font-awesome-icon icon="plus"/>
           </button>
         </b-table-column>
@@ -48,6 +48,7 @@ export default {
       this.products = await ApiService.getProducts();
       this.orderId = this.$route.params.id;
       this.isLoading = false;
+      this.cart = this.$store.getters.cart;
     } catch (err) {
       this.error = err.message;
     }
@@ -69,8 +70,8 @@ export default {
     async Add(product) {
       try {
         this.$notification.open(product.food_drink + " added to cart!");
-        this.cart++;
-        this.$store.commit("updateProducts", product);
+        this.$store.commit("addProduct", product);
+        this.cart = this.$store.getters.cart;
         this.CheckQuantity(product);
         await ApiService.updateOrder(this.orderProducts, this.orderId);
       } catch (error) {

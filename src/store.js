@@ -16,7 +16,7 @@ export default new Vuex.Store({
       state.username = user.name;
       state.password = user.pwd;
     },
-    updateProducts(state, p) {
+    addProduct(state, p) {
       let existing = false;
       state.orderProducts.forEach(element => {
         if (element.pid == p.id) {
@@ -32,7 +32,23 @@ export default new Vuex.Store({
           quant: 1
         });
       }
+    },
+    rmvProduct(state, p) {
+      state.orderProducts.forEach(element => {
+        if ((element.pid == p.pid) & (element.quant > 1)) {
+          element.quant--;
+        } else if ((element.pid == p.pid) & (element.quant == 1)) {
+          state.orderProducts.splice(state.orderProducts.indexOf(element), 1);
+        }
+      });
+    },
+    clear(state) {
+      state.orderProducts = [];
     }
   },
-  actions: {}
+  getters: {
+    cart: state => {
+      return state.orderProducts.reduce((pv, cv) => pv + cv.quant, 0);
+    }
+  }
 });

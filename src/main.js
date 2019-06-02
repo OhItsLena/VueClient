@@ -7,11 +7,13 @@ import "buefy/dist/buefy.css";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import store from "./store";
 
 library.add(faPlus);
+library.add(faMinus);
 library.add(faShoppingCart);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
