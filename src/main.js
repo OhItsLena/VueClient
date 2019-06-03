@@ -18,6 +18,18 @@ library.add(faShoppingCart);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
+Vue.filter("toCurrency", function(value) {
+  if (typeof value !== "number") {
+    return value;
+  }
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2
+  });
+  return formatter.format(value);
+});
+
 Vue.config.productionTip = false;
 
 Vue.use(Buefy);

@@ -67,6 +67,7 @@ class ApiService {
       }
     });
   }
+
   //Create Order
   static insertOrder() {
     return new Promise(async (resolve, reject) => {
