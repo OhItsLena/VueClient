@@ -28,9 +28,9 @@
     >Complete Order</b-button>
     <b-button
       class="is-rounded is-light is-large is-fullwidth"
-      @click="cancle()"
+      @click="cancel()"
       style="margin-top: 10px"
-    >Cancle Order</b-button>
+    >Cancel Order</b-button>
   </section>
 </template>
 <script>
@@ -61,10 +61,10 @@ export default {
       this.$store.commit("clear");
       this.$router.push("/login");
     },
-    async cancle() {
+    async cancel() {
       try {
         console.log(await ApiService.deleteOrder(this.orderId));
-        this.$notification.open("Order canceled! :(");
+        this.$notification.open("Order cancelled! :(");
         this.$store.commit("clear");
         this.$router.push("/login");
       } catch (error) {
